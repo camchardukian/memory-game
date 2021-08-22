@@ -1,0 +1,21 @@
+.card {
+  height: 150px;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1 1 150px;
+  margin: 0px 16px 16px 0px;
+  @media (min-width: 320px) and (max-width: 374px) {
+    height: 80px;
+    flex: 1 1 80px;
+  }
+  @media (min-width: 375px) and (max-width: 480px) {
+    height: 96px;
+    flex: 1 1 96px;
+  }
+  @media (min-width: 481px) and (max-width: 767px) {
+    height: 128px;
+    flex: 1 1 128px;
+  }
+}
