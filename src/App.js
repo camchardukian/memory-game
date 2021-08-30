@@ -4,17 +4,43 @@ import { TWELVE_CARDS_DEFAULT_DATA } from './utils/constants'
 
 const App = () => {
    const [cardsArray, setCardsArray] = useState(TWELVE_CARDS_DEFAULT_DATA)
-   const [numberOfFlippedCards, setNumberOfFlippedCards] = useState(0)
+   const [flippedCards, setFlippedCards] = useState([])
 
    useEffect(() => {
-      setNumberOfFlippedCards(() => {
-         return cardsArray.reduce((a, c) => (c.isFlippedToBack === false ? ++a : a), 0)
-      })
-   }, [cardsArray])
+      if (flippedCards.length === 2) {
+         if (flippedCards[0]['keyForMatching'] === flippedCards[1]['keyForMatching']) {
+            setTimeout(() => {
+               setCardsArray((prevState) => {
+                  return prevState.filter((item) => {
+                     return item.keyForMatching !== flippedCards[0]['keyForMatching']
+                  })
+               })
+            }, 1000)
+            setFlippedCards([])
+         } else {
+            setTimeout(() => {
+               setCardsArray((prevState) => {
+                  return prevState.map((item) => {
+                     item.isFlippedToBack = true
+                     return item
+                  })
+               })
+            }, 1000)
+            setFlippedCards([])
+         }
+      }
+   }, [cardsArray, flippedCards])
 
    const handleClickCard = (index) => {
-      console.log('cardsArray[index]', cardsArray[index]['isFlippedToBack'])
-      if (numberOfFlippedCards < 2 || !cardsArray[index]['isFlippedToBack']) {
+      const isClickedCardAlreadyFlipped = !cardsArray[index]['isFlippedToBack']
+      if (isClickedCardAlreadyFlipped) {
+         return
+      } else if (flippedCards.length < 2 || !cardsArray[index]['isFlippedToBack']) {
+         setFlippedCards((prevState) => {
+            const updatedFlippedCards = [...prevState]
+            updatedFlippedCards.push(cardsArray[index])
+            return updatedFlippedCards
+         })
          let updatedCardsArray = [...cardsArray]
          updatedCardsArray[index]['isFlippedToBack'] =
             !updatedCardsArray[index]['isFlippedToBack']
@@ -23,10 +49,7 @@ const App = () => {
    }
    return (
       <div className="App">
-         <CardMatchingPage
-            cardsArray={TWELVE_CARDS_DEFAULT_DATA}
-            onClickCard={handleClickCard}
-         />
+         <CardMatchingPage cardsArray={cardsArray} onClickCard={handleClickCard} />
       </div>
    )
 }
