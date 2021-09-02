@@ -2,8 +2,12 @@ import React, { useState, useEffect } from 'react'
 import CardMatchingPage from './containers/CardMatchingPage'
 import { TWELVE_CARDS_DEFAULT_DATA } from './utils/constants'
 
+const shuffleArray = (array) => {
+   return array.sort(() => Math.random() - 0.5)
+}
+
 const App = () => {
-   const [cardsArray, setCardsArray] = useState(TWELVE_CARDS_DEFAULT_DATA)
+   const [cardsArray, setCardsArray] = useState(shuffleArray(TWELVE_CARDS_DEFAULT_DATA))
    const [flippedCards, setFlippedCards] = useState([])
 
    useEffect(() => {
@@ -35,7 +39,7 @@ const App = () => {
       const isClickedCardAlreadyFlipped = !cardsArray[index]['isFlippedToBack']
       if (isClickedCardAlreadyFlipped) {
          return
-      } else if (flippedCards.length < 2 || !cardsArray[index]['isFlippedToBack']) {
+      } else if (flippedCards.length < 2) {
          setFlippedCards((prevState) => {
             const updatedFlippedCards = [...prevState]
             updatedFlippedCards.push(cardsArray[index])
