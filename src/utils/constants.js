@@ -3,6 +3,11 @@ export const CARD_TYPES = {
    IMAGE: 'image',
 }
 
+export const MODE = {
+   PLAY_NOW: 'PLAY_NOW',
+   CUSTOM_PLAY: 'CUSTOM_PLAY',
+}
+
 export const TWELVE_CARDS_DEFAULT_DATA = [
    {
       type: 'text',

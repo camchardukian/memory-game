@@ -1,0 +1,23 @@
+.select-mode-page-container {
+   .title {
+      font-size: 48px;
+      font-weight: bold;
+      line-height: 1.2;
+      margin-bottom: 24px;
+   }
+   .btn-container {
+      display: flex;
+      justify-content: space-evenly;
+      button {
+         height: 40px;
+         max-width: 300px;
+         flex: 1;
+         background-color: #19bbb3;
+         border: 1px solid #19bbb3;
+         padding: 8px 16px;
+         margin: 0px 16px;
+         font-size: 18px;
+         color: #fff;
+      }
+   }
+}
