@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import CardMatchingPage from './containers/CardMatchingPage'
-import { TWELVE_CARDS_DEFAULT_DATA } from './utils/constants'
+import SelectModePage from './containers/SelectModePage'
+import { TWELVE_CARDS_DEFAULT_DATA, MODE } from './utils/constants'
+import './App.scss'
 
+// Note: this function provides only a degree of randomness -- not true randomness.
 const shuffleArray = (array) => {
    return array.sort(() => Math.random() - 0.5)
 }
@@ -9,6 +12,11 @@ const shuffleArray = (array) => {
 const App = () => {
    const [cardsArray, setCardsArray] = useState(shuffleArray(TWELVE_CARDS_DEFAULT_DATA))
    const [flippedCards, setFlippedCards] = useState([])
+   const [mode, setMode] = useState('')
+
+   const handleSetMode = (mode) => {
+      setMode(mode)
+   }
 
    useEffect(() => {
       if (flippedCards.length === 2) {
@@ -52,8 +60,24 @@ const App = () => {
       }
    }
    return (
-      <div className="App">
-         <CardMatchingPage cardsArray={cardsArray} onClickCard={handleClickCard} />
+      <div className="app">
+         {mode ? (
+            <>
+               {mode === MODE.PLAY_NOW ? (
+                  <CardMatchingPage
+                     cardsArray={cardsArray}
+                     onClickCard={handleClickCard}
+                  />
+               ) : (
+                  <div>Custom Card Creation Development in Progress...</div>
+               )}
+               <button className="return-home-btn" onClick={() => handleSetMode('')}>
+                  Home
+               </button>
+            </>
+         ) : (
+            <SelectModePage onClickSetMode={handleSetMode} />
+         )}
       </div>
    )
 }
