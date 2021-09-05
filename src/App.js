@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import CardMatchingPage from './containers/CardMatchingPage'
 import SelectModePage from './containers/SelectModePage'
+import CreateCardPage from './containers/CreateCardPage'
 import { TWELVE_CARDS_DEFAULT_DATA, MODE } from './utils/constants'
 import './App.scss'
 
@@ -11,6 +12,8 @@ const shuffleArray = (array) => {
 
 const App = () => {
    const [cardsArray, setCardsArray] = useState(shuffleArray(TWELVE_CARDS_DEFAULT_DATA))
+   const [cardToBeCreated, setCardToBeCreated] = useState('')
+   const [createdCardsArray, setCreatedCardsArray] = useState([])
    const [flippedCards, setFlippedCards] = useState([])
    const [mode, setMode] = useState('')
 
@@ -59,6 +62,18 @@ const App = () => {
          setCardsArray(updatedCardsArray)
       }
    }
+
+   const handleChangeCreatedCardValue = (e) => {
+      setCardToBeCreated(e.target.value)
+   }
+
+   const handleCreateCard = () => {
+      setCreatedCardsArray((prevState) => {
+         const updatedCardsArray = [...prevState]
+         updatedCardsArray.push(cardToBeCreated)
+         return updatedCardsArray
+      })
+   }
    return (
       <div className="app">
          {mode ? (
@@ -68,9 +83,23 @@ const App = () => {
                      cardsArray={cardsArray}
                      onClickCard={handleClickCard}
                   />
+               ) : mode === MODE.CUSTOM_PLAY ? (
+                  // @TODO
+                  // Note: cards can now be added to a createdCards array
+                  // but these values will need to be sent through
+                  // some type of helper function to add additional properties
+                  // such as isFlippedToBack, and keyForMatching before they
+                  // can be at all functional as standalone cards
+                  <CreateCardPage
+                     onChangeCreatedCardValue={handleChangeCreatedCardValue}
+                     onCreateCard={handleCreateCard}
+                  />
                ) : (
-                  <div>Custom Card Creation Development in Progress...</div>
+                  <></>
                )}
+               {createdCardsArray.map((card) => {
+                  return <div>{card}</div>
+               })}
                <button className="return-home-btn" onClick={() => handleSetMode('')}>
                   Home
                </button>
