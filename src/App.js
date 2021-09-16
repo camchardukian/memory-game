@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react'
 import CardMatchingPage from './containers/CardMatchingPage'
 import SelectModePage from './containers/SelectModePage'
 import CreateCardPage from './containers/CreateCardPage'
+import Card from './components/Card'
 import { TWELVE_CARDS_DEFAULT_DATA, MODE } from './utils/constants'
+import Helpers from './utils/Helpers'
+
 import './App.scss'
 
 // Note: this function provides only a degree of randomness -- not true randomness.
@@ -17,7 +20,17 @@ const App = () => {
    const [flippedCards, setFlippedCards] = useState([])
    const [mode, setMode] = useState('')
 
-   const handleSetMode = (mode) => {
+   const handleSetMode = (args) => {
+      const { mode, shouldResetCardsArray } = args
+      if (shouldResetCardsArray) {
+         setCardsArray(() => {
+            const updatedCardsArray = TWELVE_CARDS_DEFAULT_DATA.map((item) => {
+               item.isFlippedToBack = true
+               return item
+            })
+            return shuffleArray(updatedCardsArray)
+         })
+      }
       setMode(mode)
    }
 
@@ -64,16 +77,38 @@ const App = () => {
    }
 
    const handleChangeCreatedCardValue = (e) => {
-      setCardToBeCreated(e.target.value)
+      setCardToBeCreated(Helpers.generateCreatedCard(e.target.value))
    }
 
    const handleCreateCard = () => {
       setCreatedCardsArray((prevState) => {
          const updatedCardsArray = [...prevState]
          updatedCardsArray.push(cardToBeCreated)
+         const matchingCardToBeCreated = Object.assign({}, cardToBeCreated)
+         updatedCardsArray.push(matchingCardToBeCreated)
          return updatedCardsArray
       })
    }
+
+   const handleStartCustomGame = () => {
+      setCardsArray(() => {
+         const updatedCardsArray = createdCardsArray.map((card) => {
+            card.isFlippedToBack = true
+            return card
+         })
+         return shuffleArray(updatedCardsArray)
+      })
+      setMode('PLAY_NOW')
+   }
+
+   const handleReturnHome = () => {
+      handleSetMode('')
+      setCardsArray([])
+      setCreatedCardsArray([])
+   }
+
+   console.log('createdCardsArray', createdCardsArray)
+   console.log('cardsArray', cardsArray)
    return (
       <div className="app">
          {mode ? (
@@ -83,26 +118,39 @@ const App = () => {
                      cardsArray={cardsArray}
                      onClickCard={handleClickCard}
                   />
-               ) : mode === MODE.CUSTOM_PLAY ? (
-                  // @TODO
-                  // Note: cards can now be added to a createdCards array
-                  // but these values will need to be sent through
-                  // some type of helper function to add additional properties
-                  // such as isFlippedToBack, and keyForMatching before they
-                  // can be at all functional as standalone cards
-                  <CreateCardPage
-                     onChangeCreatedCardValue={handleChangeCreatedCardValue}
-                     onCreateCard={handleCreateCard}
-                  />
                ) : (
-                  <></>
+                  mode === MODE.CUSTOM_PLAY && (
+                     <>
+                        <CreateCardPage
+                           onChangeCreatedCardValue={handleChangeCreatedCardValue}
+                           onCreateCard={handleCreateCard}
+                        />
+                        <div className="created-cards-list-container">
+                           {createdCardsArray.map((cardInfo, index) => {
+                              return (
+                                 <Card
+                                    key={index}
+                                    cardInfo={cardInfo}
+                                    onClick={() => null}
+                                 />
+                              )
+                           })}
+                        </div>
+                     </>
+                  )
                )}
-               {createdCardsArray.map((card) => {
-                  return <div>{card}</div>
-               })}
-               <button className="return-home-btn" onClick={() => handleSetMode('')}>
+               <button className="return-home-btn" onClick={handleReturnHome}>
                   Home
                </button>
+               {mode === MODE.CUSTOM_PLAY && (
+                  <button
+                     disabled={!createdCardsArray.length}
+                     className="start-custom-game-btn"
+                     onClick={handleStartCustomGame}
+                  >
+                     Start Game
+                  </button>
+               )}
             </>
          ) : (
             <SelectModePage onClickSetMode={handleSetMode} />
