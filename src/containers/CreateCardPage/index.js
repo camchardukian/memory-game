@@ -8,7 +8,7 @@ const CreateCardPage = ({ onChangeCreatedCardValue, onCreateCard }) => {
    }
    return (
       <div>
-         <div className="title">Create Card!</div>
+         <div className="title">Create Your Cards Below!</div>
          <input
             id="createdCard"
             onChange={onChangeCreatedCardValue}

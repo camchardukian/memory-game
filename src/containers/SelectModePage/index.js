@@ -7,8 +7,20 @@ const SelectModePage = ({ onClickSetMode }) => {
       <div className="select-mode-page-container">
          <div className="title">Select Mode</div>
          <div className="btn-container">
-            <button onClick={() => onClickSetMode(MODE.CUSTOM_PLAY)}>Custom Play</button>
-            <button onClick={() => onClickSetMode(MODE.PLAY_NOW)}>Play Now</button>
+            <button
+               onClick={() =>
+                  onClickSetMode({ mode: MODE.CUSTOM_PLAY, shouldResetCardsArray: false })
+               }
+            >
+               Custom Play
+            </button>
+            <button
+               onClick={() =>
+                  onClickSetMode({ mode: MODE.PLAY_NOW, shouldResetCardsArray: true })
+               }
+            >
+               Play Now
+            </button>
          </div>
       </div>
    )
