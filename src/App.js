@@ -77,10 +77,13 @@ const App = () => {
    }
 
    const handleChangeCreatedCardValue = (e) => {
-      setCardToBeCreated(Helpers.generateCreatedCard(e.target.value))
+      setCardToBeCreated(Helpers.generateCreatedCard(e.target.value.trim()))
    }
 
    const handleCreateCard = () => {
+      if (createdCardsArray.some((existingCard) => existingCard.content === cardToBeCreated.content)) {
+         return alert('Error: Please enter a unique card value.')
+      } 
       setCreatedCardsArray((prevState) => {
          const updatedCardsArray = [...prevState]
          updatedCardsArray.push(cardToBeCreated)
@@ -107,8 +110,6 @@ const App = () => {
       setCreatedCardsArray([])
    }
 
-   console.log('createdCardsArray', createdCardsArray)
-   console.log('cardsArray', cardsArray)
    return (
       <div className="app">
          {mode ? (
