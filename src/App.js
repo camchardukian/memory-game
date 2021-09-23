@@ -3,7 +3,7 @@ import CardMatchingPage from './containers/CardMatchingPage'
 import SelectModePage from './containers/SelectModePage'
 import CreateCardPage from './containers/CreateCardPage'
 import Card from './components/Card'
-import { TWELVE_CARDS_DEFAULT_DATA, MODE } from './utils/constants'
+import { TWELVE_CARDS_DEFAULT_DATA, MODE, CARD_TYPES } from './utils/constants'
 import Helpers from './utils/Helpers'
 
 import './App.scss'
@@ -76,14 +76,29 @@ const App = () => {
       }
    }
 
-   const handleChangeCreatedCardValue = (e) => {
-      setCardToBeCreated(Helpers.generateCreatedCard(e.target.value.trim()))
+   const handleChangeCreatedTextCardValue = (e) => {
+      setCardToBeCreated(
+         Helpers.generateCreatedCard({
+            type: CARD_TYPES.TEXT,
+            content: e.target.value.trim(),
+         })
+      )
+   }
+
+   const handleChangeCreatedImageCardValue = (imageFile) => {
+      setCardToBeCreated(
+         Helpers.generateCreatedCard({ type: CARD_TYPES.IMAGE, content: imageFile })
+      )
    }
 
    const handleCreateCard = () => {
-      if (createdCardsArray.some((existingCard) => existingCard.content === cardToBeCreated.content)) {
+      if (
+         createdCardsArray.some(
+            (existingCard) => existingCard.content === cardToBeCreated.content
+         )
+      ) {
          return alert('Error: Please enter a unique card value.')
-      } 
+      }
       setCreatedCardsArray((prevState) => {
          const updatedCardsArray = [...prevState]
          updatedCardsArray.push(cardToBeCreated)
@@ -123,7 +138,10 @@ const App = () => {
                   mode === MODE.CUSTOM_PLAY && (
                      <>
                         <CreateCardPage
-                           onChangeCreatedCardValue={handleChangeCreatedCardValue}
+                           onChangeCreatedTextCardValue={handleChangeCreatedTextCardValue}
+                           onChangeCreatedImageCardValue={
+                              handleChangeCreatedImageCardValue
+                           }
                            onCreateCard={handleCreateCard}
                         />
                         <div className="created-cards-list-container">

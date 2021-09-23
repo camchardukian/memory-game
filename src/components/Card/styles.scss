@@ -41,6 +41,9 @@
          -moz-user-select: none;
          -webkit-user-select: none;
          -webkit-touch-callout: none;
+         .card-image {
+            width: 100%;
+         }
       }
       .card-back {
          transform: rotateY(180deg);
