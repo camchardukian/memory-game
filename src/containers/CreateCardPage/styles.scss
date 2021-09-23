@@ -4,7 +4,42 @@
    line-height: 1.2;
    margin-bottom: 24px;
 }
-input {
-   margin-right: 16px;
-   margin-bottom: 16px;
+.hidden {
+   display: none;
+}
+label {
+   margin-right: 8px;
+}
+.create-text-card-container,
+.create-image-card-container {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   margin-top: 16px;
+   input {
+      margin-bottom: 16px;
+   }
+}
+select {
+   cursor: pointer;
+}
+.create-image-card-container {
+   .image-preview-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 120px;
+      min-height: 60px;
+      border: 1px solid black;
+      object-fit: cover;
+      margin-bottom: 16px;
+      .image-preview-image {
+         width: 100%;
+         max-height: 200px;
+      }
+   }
+   input[type='file'] {
+      color: transparent;
+      width: 87px;
+   }
 }

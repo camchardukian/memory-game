@@ -1,11 +1,11 @@
 import { v4 as uuidv4 } from 'uuid'
 
 const Helpers = {
-   generateCreatedCard: (content) => {
+   generateCreatedCard: ({ type, content }) => {
       if (content && content.trim()) {
          const keyForMatching = uuidv4()
          return {
-            type: 'text',
+            type,
             content,
             keyForMatching,
             isFlippedToBack: false,
