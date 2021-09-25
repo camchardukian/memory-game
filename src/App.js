@@ -18,6 +18,7 @@ const App = () => {
    const [cardToBeCreated, setCardToBeCreated] = useState('')
    const [createdCardsArray, setCreatedCardsArray] = useState([])
    const [flippedCards, setFlippedCards] = useState([])
+   const [isCardFlippingEnabled, setIsCardFlippingEnabled] = useState(true)
    const [mode, setMode] = useState('')
 
    const handleSetMode = (args) => {
@@ -36,13 +37,25 @@ const App = () => {
 
    useEffect(() => {
       if (flippedCards.length === 2) {
+         setIsCardFlippingEnabled(false)
+         setTimeout(() => {
+            setIsCardFlippingEnabled(true)
+         }, 1000)
          if (flippedCards[0]['keyForMatching'] === flippedCards[1]['keyForMatching']) {
             setTimeout(() => {
                setCardsArray((prevState) => {
-                  return prevState.filter((item) => {
-                     return item.keyForMatching !== flippedCards[0]['keyForMatching']
+                  return prevState.map((item) => {
+                     item.isFlippedToBack = true
+                     return item
                   })
                })
+               setTimeout(() => {
+                  setCardsArray((prevState) => {
+                     return prevState.filter((item) => {
+                        return item.keyForMatching !== flippedCards[0]['keyForMatching']
+                     })
+                  })
+               }, 500)
             }, 1000)
             setFlippedCards([])
          } else {
@@ -63,15 +76,14 @@ const App = () => {
       const isClickedCardAlreadyFlipped = !cardsArray[index]['isFlippedToBack']
       if (isClickedCardAlreadyFlipped) {
          return
-      } else if (flippedCards.length < 2) {
+      } else if (flippedCards.length < 2 && isCardFlippingEnabled) {
          setFlippedCards((prevState) => {
             const updatedFlippedCards = [...prevState]
             updatedFlippedCards.push(cardsArray[index])
             return updatedFlippedCards
          })
          let updatedCardsArray = [...cardsArray]
-         updatedCardsArray[index]['isFlippedToBack'] =
-            !updatedCardsArray[index]['isFlippedToBack']
+         updatedCardsArray[index]['isFlippedToBack'] = false
          setCardsArray(updatedCardsArray)
       }
    }
