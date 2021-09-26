@@ -137,6 +137,14 @@ const App = () => {
       setCreatedCardsArray([])
    }
 
+   const handleClickPlayAgain = () => {
+      if (createdCardsArray.length) {
+         setCardsArray(shuffleArray(createdCardsArray))
+      } else {
+         setCardsArray(shuffleArray(TWELVE_CARDS_DEFAULT_DATA))
+      }
+   }
+
    return (
       <div className="app">
          {mode ? (
@@ -169,6 +177,11 @@ const App = () => {
                         </div>
                      </>
                   )
+               )}
+               {cardsArray.length === 0 && mode === MODE.PLAY_NOW && (
+                  <button className="play-again-btn" onClick={handleClickPlayAgain}>
+                     Play again
+                  </button>
                )}
                <button className="return-home-btn" onClick={handleReturnHome}>
                   Home
